@@ -3,12 +3,12 @@ import json
 import sys
 from datetime import datetime
 from dataclasses import dataclass
-from utils import calculate_loss,getDate,send_whatsapp_message,log_value
+from utils import send_whatsapp_message,log_value,get_net_profit
 from exceptions import CustomException
 
 
 class Transaction:
-    def __init__(self, left_pant, left_tshirt, pant_sale, tshirt_sale, total_money,pant_loss, tshirt_loss, salary, other_exp, today, note):
+    def __init__(self, left_pant, left_tshirt, pant_sale, tshirt_sale, total_money,pant_loss, tshirt_loss, salary, other_exp, today, note,profit,net_lost):
         self.left_pant = left_pant
         self.left_tshirt = left_tshirt
         self.pant_sale = pant_sale
@@ -20,6 +20,8 @@ class Transaction:
         self.other_exp = other_exp
         self.today = today
         self.note = note
+        self.profit = profit
+        self.lost = net_lost
 
     def prepare_msg(self):
         msg = f"Transaction Details:\n"
@@ -80,8 +82,6 @@ class Update_Material:
 
     
 
-
-
 if __name__ == "__main__":
     try: 
         print("1.Log Value\n2.Update Material\n3.See Data\n4.Lost Material",end="\n\n")
@@ -93,6 +93,7 @@ if __name__ == "__main__":
         tshirt = materials.getTshirt()
 
         if(num==1):
+            # Handling Updates if any 
             update = input("Is there any Update (y/n): ")
             if(update=='y'):
                 materials.update_function()
@@ -100,19 +101,27 @@ if __name__ == "__main__":
                 tshirt = materials.getTshirt()
             else:
                 pass
-            # Taking pant and tshirt values from json file 
 
+
+            # Taking pant and tshirt values from json file 
             left_pant  = int(input("Pants Left: "))
             left_tshirt = int(input("Tshirts Left: "))
             pant_sale = pant - left_pant
             tshirt_sale = tshirt - left_tshirt
 
             total_money = (pant_sale * 150) + (tshirt_sale *200)
+            
 
             print("Total Money: ",total_money,end="\n")
             pant_loss = int(input("Pant Loss: "))
             tshirt_loss =  int(input("Tshirt Loss: "))
 
+            # Calculating profit and loss
+            net_profit,net_lost = get_net_profit(total_money,pant_sale,tshirt_sale,pant_loss,tshirt_loss)
+            print(net_profit)
+            print(net_lost)
+
+            # pants and tshirts left after adjusting all losses 
             pant = left_pant-pant_loss
             tshirt = left_tshirt - tshirt_loss
 
@@ -124,18 +133,23 @@ if __name__ == "__main__":
             other_exp = int(input("Enter Other Expenditure: "))
 
             # Storing the values int txt,json and initiating whattsapp msg
+            profit = net_profit-salary-other_exp
+            print("Profit left: ",profit)
+ 
             today = input("Enter date of storing (yyyy-mm-dd): ")
             note = input("Enter Note if any: \n")
 
 
 
             # Storing, Printing and Sending msg 
-            representing = Transaction(left_pant,left_tshirt,pant_sale,tshirt_sale,total_money,pant_loss,tshirt_loss,salary,other_exp,today,note)
+            representing = Transaction(left_pant,left_tshirt,pant_sale,tshirt_sale,total_money,pant_loss,tshirt_loss,salary,other_exp,today,note,profit,net_lost)
             representing.alldata()
             
 
         elif(num==2):
             materials.update_function()
+            pant = materials.getPant()
+            tshirt = materials.getTshirt()
 
         elif(num==3):
             pass
