@@ -52,3 +52,30 @@ def day_wise_log(today,cash_in_hand,money_in_gpay,salary,profit,money_lost,note)
         writer.writerow([today, cash_in_hand, money_in_gpay, salary, profit, money_lost, note])
 
 
+def read_transactions_by_date(input_date):
+    try:
+        with open('transactions.csv', mode='r') as file:
+            reader = csv.reader(file)
+            header = next(reader)  
+            transactions = [row for row in reader if row[0] == input_date]
+            if transactions:
+                print(f"Transactions for {input_date}:")
+                for transaction in transactions:
+                    print(transaction)
+            else:
+                print(f"No transactions found for {input_date}.")
+    except FileNotFoundError:
+        print("No transactions logged yet.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
+
+def read_transactions_by_date(date):
+    with open("daywise_info.csv", "r") as file:
+        reader = csv.reader(file)
+        header = next(reader)
+        for row in reader:
+            if row[0] == date: 
+                return row 
+    return None
