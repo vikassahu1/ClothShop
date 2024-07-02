@@ -1,0 +1,13 @@
+Transaction Details:
+Date: 2024-07-01
+Left Pant: 225
+Left Tshirt: 278
+Pant Sale: 17
+Tshirt Sale: 24
+Total Money: 7350
+Pant Loss: 0
+Tshirt Loss: 0
+Salary: 700
+Other Expenses: 250
+Note: gpay-1700, cash-4700(Earned), 100 ka polythene,150 transport 
+

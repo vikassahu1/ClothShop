@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 import pywhatkit as pwk
 
 
@@ -10,21 +10,21 @@ def calculate_loss():
     pass
 
 
-def send_whatsapp_message(phone_number, message):
+def send_whatsapp_message(group_name, message):
+    # Get current time
     now = datetime.now()
-    hours = now.hour
-    minutes = now.minute + 2  # Send the message 2 minutes from now
-    pwk.sendwhatmsg(phone_number, message, hours, minutes)
 
-def log_value(log_data):
-    today = datetime.today().strftime('%Y-%m-%d')
-    log_file = f"log_{today}.txt"
-    with open(log_file, 'a') as f:
-        f.write(log_data + '\n')
+    # Adjust time parameters for immediate sending (1 second delay)
+    send_time = now + timedelta(seconds=1)
+    hours = send_time.hour
+    minutes = send_time.minute
+
+    # Send message to group
+    pwk.sendwhatmsg_to_group(group_name, message, hours, minutes, wait_time=10)
 
 
-import os
-from datetime import datetime
+
+
 
 def log_value(log_data,today):
     # Create a directory named 'logs' if it doesn't exist

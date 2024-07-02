@@ -6,10 +6,6 @@ from dataclasses import dataclass
 from utils import calculate_loss,getDate,send_whatsapp_message,log_value
 from exceptions import CustomException
 
-# pant = 300
-# tshirt = 300
-# cash,gpay
-
 
 class Transaction:
     def __init__(self, left_pant, left_tshirt, pant_sale, tshirt_sale, total_money,pant_loss, tshirt_loss, salary, other_exp, today, note):
@@ -26,11 +22,26 @@ class Transaction:
         self.note = note
 
     def prepare_msg(self):
-        pass
+        msg = f"Transaction Details:\n"
+        msg += f"Date: {self.today}\n"
+        msg += f"Left Pant: {self.left_pant}\n"
+        msg += f"Left Tshirt: {self.left_tshirt}\n"
+        msg += f"Pant Sale: {self.pant_sale}\n"
+        msg += f"Tshirt Sale: {self.tshirt_sale}\n"
+        msg += f"Total Money: {self.total_money}\n"
+        msg += f"Pant Loss: {self.pant_loss}\n"
+        msg += f"Tshirt Loss: {self.tshirt_loss}\n"
+        msg += f"Salary: {self.salary}\n"
+        msg += f"Other Expenses: {self.other_exp}\n"
+        msg += f"Note: {self.note}\n"
+        print(f"\n{msg}Transaction Completed!\n")
+        return msg
 
 
     def alldata(self):
-        log_value()
+        msg = self.prepare_msg()
+        log_value(msg,self.today)
+        send_whatsapp_message("Hisab",msg)
 
  
 
@@ -66,8 +77,7 @@ class Update_Material:
         no_of_tshirts_added = int(input("Enter number of new tshirts added: "))
         self.update_pant(pant+no_of_pants_added)
         self.update_tshirt(tshirt+no_of_tshirts_added)
-        pant = self.getPant()
-        tshirt = self.getTshirt()
+
     
 
 
@@ -82,14 +92,14 @@ if __name__ == "__main__":
         pant = materials.getPant()
         tshirt = materials.getTshirt()
 
-        print(pant)
-
-
         if(num==1):
-            update = int(input("Is there any Update (y/n): "))
+            update = input("Is there any Update (y/n): ")
             if(update=='y'):
                 materials.update_function()
-            
+                pant = materials.getPant()
+                tshirt = materials.getTshirt()
+            else:
+                pass
             # Taking pant and tshirt values from json file 
 
             left_pant  = int(input("Pants Left: "))
@@ -117,10 +127,11 @@ if __name__ == "__main__":
             today = input("Enter date of storing (yyyy-mm-dd): ")
             note = input("Enter Note if any: \n")
 
+
+
+            # Storing, Printing and Sending msg 
             representing = Transaction(left_pant,left_tshirt,pant_sale,tshirt_sale,total_money,pant_loss,tshirt_loss,salary,other_exp,today,note)
-
-
-
+            representing.alldata()
             
 
         elif(num==2):
