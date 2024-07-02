@@ -1,23 +1,38 @@
 import os
 import json
+import sys
 from datetime import datetime
 from dataclasses import dataclass
-from utils import calculate_loss,getDate
+from utils import calculate_loss,getDate,send_whatsapp_message,log_value
+from exceptions import CustomException
 
 # pant = 300
 # tshirt = 300
 # cash,gpay
 
 
-class EnterValue:
-    def __init__(self):
+class Transaction:
+    def __init__(self, left_pant, left_tshirt, pant_sale, tshirt_sale, total_money,pant_loss, tshirt_loss, salary, other_exp, today, note):
+        self.left_pant = left_pant
+        self.left_tshirt = left_tshirt
+        self.pant_sale = pant_sale
+        self.tshirt_sale = tshirt_sale
+        self.total_money = total_money
+        self.pant_loss = pant_loss
+        self.tshirt_loss = tshirt_loss
+        self.salary = salary
+        self.other_exp = other_exp
+        self.today = today
+        self.note = note
+
+    def prepare_msg(self):
         pass
 
 
-    def enter(self):
-        pass
+    def alldata(self):
+        log_value()
 
-
+ 
 
 class Update_Material:
     def __init__(self):
@@ -45,56 +60,78 @@ class Update_Material:
         data = {'pant': self.pant, 'tshirt': self.tshirt}
         with open(self.file_path, 'w') as f:
             json.dump(data, f, indent=4)
+
+    def update_function(self):
+        no_of_pants_added = int(input("Enter number of new pants added: "))
+        no_of_tshirts_added = int(input("Enter number of new tshirts added: "))
+        self.update_pant(pant+no_of_pants_added)
+        self.update_tshirt(tshirt+no_of_tshirts_added)
+        pant = self.getPant()
+        tshirt = self.getTshirt()
     
 
 
 
 if __name__ == "__main__":
-    print("1.Log Value\n2.Update Material\n3.See Data\n4.Lost Material",end="\n\n")
-    num = int(input("Enter the Choice: "))
+    try: 
+        print("1.Log Value\n2.Update Material\n3.See Data\n4.Lost Material",end="\n\n")
+        num = int(input("Enter the Choice: "))
 
-    # To get material (tshirt and pants)
-    materials = Update_Material()
-    pant = materials.getPant()
-    tshirt = materials.getTshirt()
+        # To get material (tshirt and pants)
+        materials = Update_Material()
+        pant = materials.getPant()
+        tshirt = materials.getTshirt()
 
-    print(pant)
-
-
-    if(num==1):
-        update = int(input("Is there any Update (y/n): "))
-        if(update=='y'):
-            no_of_pants_added = int(input("Enter number of new pants added: "))
-            no_of_tshirts_added = int(input("Enter number of new tshirts added: "))
-            materials.update_pant(pant+no_of_pants_added)
-            materials.update_tshirt(tshirt+no_of_tshirts_added)
-            pant = materials.getPant()
-            tshirt = materials.getTshirt()
-        
-        # Taking pant and tshirt values from json file 
-
-        left_pant  = int(input("Pants Left: "))
-        left_tshirt = int(input("Tshirts Left: "))
-        pant_sale = pant - left_pant
-        tshirt_sale = tshirt - left_tshirt
-
-        total_money = (pant_sale * 150) + (tshirt_sale *200)
-
-        print("Total Money: ",total_money,end="\n")
-        pant_loss = int(input("Pant Loss: "))
-        tshirt_loss =  int(input("Tshirt  Loss: "))
-
-        pant = left_pant-pant_loss
-        tshirt = left_tshirt - tshirt_loss
-        
-        salary = int(input("Enter Salesman Salary: "))
-        other_exp = int(input("Enter Other Expenditure: "))
-
-        # Storing the values int txt,json and initiating whattsapp msg
+        print(pant)
 
 
-    elif(num==2):
-        pass
+        if(num==1):
+            update = int(input("Is there any Update (y/n): "))
+            if(update=='y'):
+                materials.update_function()
+            
+            # Taking pant and tshirt values from json file 
+
+            left_pant  = int(input("Pants Left: "))
+            left_tshirt = int(input("Tshirts Left: "))
+            pant_sale = pant - left_pant
+            tshirt_sale = tshirt - left_tshirt
+
+            total_money = (pant_sale * 150) + (tshirt_sale *200)
+
+            print("Total Money: ",total_money,end="\n")
+            pant_loss = int(input("Pant Loss: "))
+            tshirt_loss =  int(input("Tshirt Loss: "))
+
+            pant = left_pant-pant_loss
+            tshirt = left_tshirt - tshirt_loss
+
+            # Updating materials to new value 
+            materials.update_pant(pant)
+            materials.update_tshirt(tshirt)
+            
+            salary = int(input("Enter Salesman Salary: "))
+            other_exp = int(input("Enter Other Expenditure: "))
+
+            # Storing the values int txt,json and initiating whattsapp msg
+            today = input("Enter date of storing (yyyy-mm-dd): ")
+            note = input("Enter Note if any: \n")
+
+            representing = Transaction(left_pant,left_tshirt,pant_sale,tshirt_sale,total_money,pant_loss,tshirt_loss,salary,other_exp,today,note)
+
+
+
+            
+
+        elif(num==2):
+            materials.update_function()
+
+        elif(num==3):
+            pass
+
+    except Exception as e:
+        raise CustomException(e,sys)
+
 
 
         
