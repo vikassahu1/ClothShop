@@ -1,0 +1,20 @@
+Transaction Details:
+Date: 2024-07-02
+
+Left Pant: 212
+Left Tshirt: 257
+Pant Sale: 13
+Tshirt Sale: 21
+Pant Loss: 0
+Tshirt Loss: 0
+
+Total Money: 6150
+Salary: 700
+Other Expenses: 0
+Note: none
+
+Profit: 1168
+Money-Lost: 0
+Paytm: 400
+Cash in Hand: 5050
+

@@ -75,7 +75,13 @@ def read_transactions_by_date(date):
     with open("daywise_info.csv", "r") as file:
         reader = csv.reader(file)
         header = next(reader)
+        x=0
+        lst = ['Date','Cash in Hand','Money in Paytm','Salary','Profit','Money Lost','Note']
         for row in reader:
             if row[0] == date: 
-                return row 
-    return None
+                for i in range(len(row)):
+                    print(f"{lst[i]} : {row[i]}")
+                x=1
+                break
+    if(x==0):
+        print("No transactions on given date available")
