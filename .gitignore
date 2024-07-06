@@ -1,3 +1,2 @@
-PyWhatKit_DB.txt
-log/
-__pycache__
+logs/*.txt
+__pycache__/

@@ -2,8 +2,8 @@ import os
 import json
 import sys
 from datetime import datetime
-from dataclasses import dataclass
-from utils import send_whatsapp_message,log_value,get_net_profit,day_wise_log,read_transactions_by_date
+# from dataclasses import dataclass
+from utils import log_value,get_net_profit,day_wise_log,read_transactions_by_date
 from exceptions import CustomException
 
 
@@ -55,7 +55,7 @@ class Transaction:
         msg = self.prepare_msg()
         log_value(msg,self.today)
         day_wise_log(self.today,self.cash_money,self.paytm,self.salary,self.profit,self.lost,self.note)
-        send_whatsapp_message("Hisab",msg)
+        # send_whatsapp_message("Hisab",msg)
         print("All logs completed !")
 
  
@@ -182,12 +182,3 @@ if __name__ == "__main__":
         
 
         
-
-
-
-
-
-
-
-        
-
